@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Hello Canvas</title>
+</head>
+
+<body>
+
+<h2>Canvas</h2>
+<ul>
+	<li>  Resolution dependent</li>
+	<li>  No support for event handlers</li>
+	<li>  Poor text rendering capabilities</li>
+	<li>  You can save the resulting image as .png or .jpg</li>
+	<li>  Well suited for graphic-intensive games</li>
+</ul>
+<canvas id="canvas1" width="300" height="200" style="border:1px solid #d3d3d3;">
+Your browser does not support the HTML5 canvas tag.</canvas>
+
+
+<canvas id="canvas2" width="300" height="200" style="border:1px solid #d3d3d3;">
+Your browser does not support the HTML5 canvas tag.</canvas>
+
+<canvas id="canvas3" width="300" height="200" style="border:1px solid #d3d3d3;">
+Your browser does not support the HTML5 canvas tag.</canvas>
+
+<canvas id="canvas4" width="300" height="200" style="border:1px solid #d3d3d3;">
+Your browser does not support the HTML5 canvas tag.</canvas>
+
+<canvas id="canvas5" width="300" height="200" style="border:1px solid #d3d3d3;">
+Your browser does not support the HTML5 canvas tag.</canvas>
+
+<canvas id="canvas6" width="300" height="200" style="border:1px solid #d3d3d3;">
+Your browser does not support the HTML5 canvas tag.</canvas>
+
+<canvas id="canvas7" width="300" height="200" style="border:1px solid #d3d3d3;">
+Your browser does not support the HTML5 canvas tag.</canvas>
+ <p>Image to use:</p>
+<img id="hands" src="join-hands.png" alt="Let's join hands" width="300" height="200">
+<p><button onclick="DrawIt()">Render it</button></p>
+
+<script>
+// canvas1
+var a = document.getElementById("canvas1");
+var a2d = a.getContext("2d");
+a2d.moveTo(0,0);
+a2d.lineTo(300,200);
+a2d.stroke();
+
+//canvas2
+var c = document.getElementById("canvas2");
+var c2d = c.getContext("2d");
+c2d.beginPath();
+c2d.arc(95,50,40,0,2*Math.PI);
+c2d.stroke(); 
+
+//canvas3
+var b = document.getElementById("canvas3");
+var b2d = b.getContext("2d");
+b2d.font = "30px Arial";
+b2d.fillText("Hello World",10,50); 
+
+//canvas4
+var e = document.getElementById("canvas4");
+var e2d = e.getContext("2d");
+e2d.font = "30px Arial";
+e2d.strokeText("Hello World",10,50); 
+
+
+//canvas5
+var f = document.getElementById("canvas5");
+var f2d = f.getContext("2d");
+
+// Create gradient
+var grd5 = f2d.createLinearGradient(0,0,300,0);
+grd5.addColorStop(0,"red");
+grd5.addColorStop(1,"white");
+
+// Fill with gradient
+f2d.fillStyle = grd5;
+f2d.fillRect(10,10,250,80); 
+
+
+//canvas6
+var h = document.getElementById("canvas6");
+var h2d = h.getContext("2d");
+
+// Create gradient
+var grd6 = h2d.createRadialGradient(75,50,5,90,60,200);
+grd6.addColorStop(0,"red");
+grd6.addColorStop(1,"white");
+
+// Fill with gradient
+h2d.fillStyle = grd6;
+h2d.fillRect(10,10,250,80); 
+
+//canvas7
+function DrawIt() {
+    var j = document.getElementById("canvas7");
+    var j2d = j.getContext("2d");
+    var img = document.getElementById("hands");
+    j2d.drawImage(img,10,10);
+}
+</script>
+ 
+ 
+
+</body>
+</html>
