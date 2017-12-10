@@ -6,14 +6,178 @@
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/88/three.min.js"></script>  
 </head>
 
-<script>
+<style>
+body {
+  overflow: hidden;
+  margin: 0;
+  cursor: pointer;
+  width: 100vw;
+  height: 100vh;
+}
 
-</script>
+canvas {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.vignette {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: radial-gradient(circle at center, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 0) 60%, rgba(0, 0, 0, 0.1) 100%);
+  background-size: 100% 100%;
+}
+
+h1 {
+  position: absolute;
+  left: 0;
+  bottom: 20px;
+  width: 100%;
+  text-align: center;
+  color: white;
+  font-family: 'Pompiere', cursive;
+  font-size: 16px;
+}
+h1 em, h1 span {
+  font-style: normal;
+  opacity: 0.5;
+  transition: 0.3s ease-out;
+}
+h1 .active {
+  font-size: 1.2em;
+  opacity: 0.8;
+}
+
+</style>
 <body>
 
- 
 
- 
+
+<canvas></canvas>
+<div class="vignette"></div>
+<h1><em>Click to toggle from </em><span class='ortho active'>Orthographic Camera</span><em> to</em> <span class="persp">Perspective Camera</span></h1>
+<p><em>Learn more from </em><a href="https://x-team.com/blog/" target="_blank">X-Team </p>
+
+<script>
+var ww = window.innerWidth,
+    wh = window.innerHeight;
+
+var renderer = new THREE.WebGLRenderer({
+  canvas: document.querySelector('canvas'),
+  antialias: true
+});
+renderer.setPixelRatio(window.devicePixelRatio > 1 ? 2 : 1);
+renderer.setSize(ww, wh);
+renderer.setClearColor(0x8cc6b0);
+
+var scene = new THREE.Scene();
+
+var triangle = new THREE.Object3D();
+scene.add(triangle);
+
+var orthographicCamera = new THREE.OrthographicCamera( ww / - 2, ww / 2, wh / 2, wh / - 2, 1, 5000 );
+orthographicCamera.position.set(1000, 1000, 1000);
+orthographicCamera.lookAt(new THREE.Vector3(0,0,0));
+
+var perspectiveCamera = new THREE.PerspectiveCamera( 45, ww / wh, 1, 5000 );
+perspectiveCamera.position.set(900, 900, 900);
+perspectiveCamera.lookAt(new THREE.Vector3(0,0,0));
+
+var cube = 80;
+if(ww < 1000) {
+  cube = 40;
+}
+var mat = new THREE.MeshLambertMaterial({
+  color:0xffffff
+});
+
+var geom = new THREE.BoxGeometry(cube * 5, cube, cube);
+var mesh = new THREE.Mesh(geom, mat);
+triangle.add(mesh);
+
+var geom = new THREE.BoxGeometry(cube, cube, cube * 5);
+var mesh = new THREE.Mesh(geom, mat);
+mesh.position.x = cube * 2.5;
+mesh.position.z = cube * 2;
+triangle.add(mesh);
+
+var geom = new THREE.BoxGeometry(cube, cube * 5.5, cube);
+var mesh = new THREE.Mesh(geom, mat);
+mesh.position.x = cube * 3;
+mesh.position.y = cube * 2.75;
+mesh.position.z = cube * 5;
+triangle.add(mesh);
+
+var geometry = new THREE.PlaneGeometry( cube, cube, cube );
+var plane = new THREE.Mesh( geometry, mat );
+plane.position.set(cube * 4.75, cube * 5.75, cube * 6.25)
+triangle.add( plane );
+
+var geometry = new THREE.PlaneGeometry( cube, cube, cube );
+var mat = new THREE.MeshBasicMaterial({color:0xffa774})
+var plane = new THREE.Mesh( geometry, mat );
+plane.position.set(cube * 4.75, cube * 6.75, cube * 6.25)
+triangle.add( plane );
+
+var directionalLight = new THREE.DirectionalLight( 0xff8472, 1 );
+directionalLight.position.x = 10;
+scene.add( directionalLight );
+var directionalLight = new THREE.DirectionalLight( 0xff9362, 1 );
+directionalLight.position.y = 10;
+scene.add( directionalLight );
+var directionalLight = new THREE.DirectionalLight( 0xdd4a42, 1 );
+directionalLight.position.z = 10;
+scene.add( directionalLight );
+
+function render(){
+  requestAnimationFrame(render);
+  if(currentCamera) {
+    renderer.render(scene, orthographicCamera);
+  } else {
+    renderer.render(scene, perspectiveCamera);
+    triangle.rotation.x += 0.003;
+    triangle.rotation.y += 0.003;
+    triangle.rotation.z += 0.003;
+  }
+}
+requestAnimationFrame(render);
+
+var currentCamera = true;
+function onResize() {
+  ww = window.innerWidth;
+  wh = window.innerHeight;
+  orthographicCamera.left = ww / - 2;
+  orthographicCamera.right = ww / 2;
+  orthographicCamera.top = wh / 2;
+  orthographicCamera.bottom = wh / - 2;
+  orthographicCamera.updateProjectionMatrix();
+  
+  perspectiveCamera.aspect = ww / wh;
+  perspectiveCamera.updateProjectionMatrix();
+  renderer.setSize(ww, wh);
+}
+function onClick() {
+  currentCamera = !currentCamera;
+  if(currentCamera) {
+    triangle.rotation.x = 0;
+    triangle.rotation.y = 0;
+    triangle.rotation.z = 0;
+    document.querySelector('.ortho').classList.add('active');
+    document.querySelector('.persp').classList.remove('active');
+  } else {
+    document.querySelector('.persp').classList.add('active');
+    document.querySelector('.ortho').classList.remove('active');
+  }
+}
+window.addEventListener("resize", onResize);
+document.body.addEventListener("click", onClick);
+
+ </script>
 
  
 </body>
